@@ -82,14 +82,11 @@ func insertTodo(c echo.Context) error {
 }
 
 func deleteTodo(c echo.Context) error {
-	todo := new(util.Todo)
-	if err := c.Bind(todo); err != nil {log.Fatal(err)}
-
+	idx := c.Param("idx")
 	db := util.DBConnection()
 	defer db.Close()
 
-	log.Println(todo.Idx)
-	res, err := db.Query("DELETE FROM TODOLIST WHERE IDX = ?", todo.Idx)
+	res, err := db.Query("DELETE FROM TODOLIST WHERE IDX = ?", idx)
 	if err != nil { log.Fatal(err) }
 	return c.JSON(http.StatusOK, res)
 }
